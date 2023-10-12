@@ -1,6 +1,7 @@
 import { formatDateString } from '@/lib/utils';
 import Image from 'next/image';
 import Link from 'next/link';
+import RepliesCount from './additional/RepliesCount';
 
 interface Props {
   id: string;
@@ -39,11 +40,6 @@ export default function ThreadCard({
   isComment,
   disableRepliesLink = false,
 }: Props) {
-  const commentsCount = comments.length;
-  const uniqueAuthorImgs = Array.from(
-    new Set([...comments.map((comment) => comment.author.image)])
-  );
-
   return (
     <article
       className={`flex w-full flex-col rounded-xl ${
@@ -52,7 +48,7 @@ export default function ThreadCard({
     >
       <div className="flex items-start justify-between">
         <div className="flex w-full flex-1 flex-row gap-4">
-          {/* AUTHOR OF THE THREAD */}
+          {/* AUTHOR IMAGE */}
           <div className="flex flex-col items-center">
             <Link href={`/profile/${author.id}`} className="relative h-11 w-11">
               <Image
@@ -67,6 +63,7 @@ export default function ThreadCard({
             <div className="thread-card_bar" />
           </div>
 
+          {/* AUTHOR NAME */}
           <div className="flex flex-col w-full">
             <Link href={`/profile/${author.id}`} className="w-fit">
               <h4 className="cursor-pointer text-base-semibold text-light-1">
@@ -112,20 +109,15 @@ export default function ThreadCard({
                 />
               </div>
 
-              {/* NUMBER OF REPLIES FOR COMMENTS */}
-              {isComment && comments?.length > 0 && (
-                <Link href={`/thread/${id}`}>
-                  <p className="mt-1 text-subtle-medium text-gray-1">
-                    {comments.length} replies
-                  </p>
-                </Link>
+              {/* NUMBER OF REPLIES FOR COMMENT */}
+              {isComment && (
+                <RepliesCount threadId={id} comments={comments} isComment />
               )}
             </div>
           </div>
         </div>
 
         {/* TODO: Delete thread */}
-        {/* TODO: Show comment logos */}
       </div>
 
       {/* COMMUNITY DETAILS */}
@@ -150,28 +142,9 @@ export default function ThreadCard({
         </Link>
       )}
 
-      {/* NUMBER OF REPLIES */}
-      {!isComment && commentsCount > 0 && (
-        <div className="mt-4 flex items-center">
-          {uniqueAuthorImgs.slice(0, 2).map((image, index) => (
-            <Image
-              key={index}
-              src={image}
-              alt={`user_${index}`}
-              width={28}
-              height={28}
-              className={`${index !== 0 && '-ml-2'} rounded-full object-cover`}
-            />
-          ))}
-          <Link
-            href={`/thread/${id}`}
-            className={`${disableRepliesLink && 'pointer-events-none'}`}
-          >
-            <p className="ml-2 text-subtle-medium text-gray-1">
-              {commentsCount} replies
-            </p>
-          </Link>
-        </div>
+      {/* NUMBER OF REPLIES FOR THREAD */}
+      {!isComment && (
+        <RepliesCount threadId={id} comments={comments} disableRepliesLink />
       )}
     </article>
   );
