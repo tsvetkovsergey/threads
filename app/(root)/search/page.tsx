@@ -13,13 +13,12 @@ export default async function Page() {
   if (!userInfo?.onboarded) redirect('/onboarding');
 
   // Fetch users
-  const result = await fetchAllUsers({
+  const { users, isNotLastPage } = await fetchAllUsers({
     userId: user.id,
     searchString: '',
     pageNumber: 1,
     pageSize: 25,
   });
-  console.log(result);
 
   return (
     <section>
@@ -28,11 +27,11 @@ export default async function Page() {
       {/* SEARCH BAR */}
 
       <div className="mt-14 flex flex-col gap-9">
-        {result.users.length === 0 ? (
+        {users.length === 0 ? (
           <p className="no-result">No users</p>
         ) : (
           <>
-            {result.users.map((person) => (
+            {users.map((person) => (
               <UserCard
                 key={person.id}
                 id={person.id}

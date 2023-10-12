@@ -150,9 +150,10 @@ export async function fetchCommunities({
     const communities = await communitiesQuery.exec();
 
     // Check if there are more communities beyond the current page.
-    const isNext = totalCommunitiesCount > skipAmount + communities.length;
+    const isNotLastPage =
+      totalCommunitiesCount > skipAmount + communities.length;
 
-    return { communities, isNext };
+    return { communities, isNotLastPage };
   } catch (error) {
     console.error('Error fetching communities:', error);
     throw error;
@@ -300,5 +301,17 @@ export async function deleteCommunity(communityId: string) {
   } catch (error) {
     console.error('Error deleting community: ', error);
     throw error;
+  }
+}
+
+export async function fetchRandomCommunities(size = 3) {
+  try {
+    connectToDB();
+
+    const randomCommunities = await Community.aggregate().sample(size);
+
+    return randomCommunities;
+  } catch (error: any) {
+    console.error('Failed to fetch random communities: ', error);
   }
 }

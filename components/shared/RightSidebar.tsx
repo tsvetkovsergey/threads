@@ -1,4 +1,9 @@
-function RightSidebar() {
+import { fetchRandomCommunities } from '@/lib/actions/community.actions';
+
+export default async function RightSidebar() {
+  const randomCommunities = await fetchRandomCommunities();
+  console.log(randomCommunities);
+
   return (
     <section className="custom-scrollbar rightsidebar">
       <div className="flex flex-1 flex-col justify-start">
@@ -12,5 +17,3 @@ function RightSidebar() {
     </section>
   );
 }
-
-export default RightSidebar;

@@ -1,4 +1,4 @@
-import Thread from '@/lib/models/thread.model';
+import { formatDateString } from '@/lib/utils';
 import Image from 'next/image';
 import Link from 'next/link';
 
@@ -24,9 +24,10 @@ interface Props {
     };
   }[];
   isComment?: boolean;
+  disableRepliesLink?: boolean;
 }
 
-const ThreadCard = ({
+export default function ThreadCard({
   id,
   currentUserId,
   parentId,
@@ -36,11 +37,17 @@ const ThreadCard = ({
   createdAt,
   comments,
   isComment,
-}: Props) => {
+  disableRepliesLink = false,
+}: Props) {
+  const commentsCount = comments.length;
+  const uniqueAuthorImgs = Array.from(
+    new Set([...comments.map((comment) => comment.author.image)])
+  );
+
   return (
     <article
       className={`flex w-full flex-col rounded-xl ${
-        isComment ? 'px-0 xs:px-7' : 'bg-dark-2 p-7'
+        isComment ? 'px-0 xs:px-7 mb-2' : 'bg-dark-2 p-7'
       }`}
     >
       <div className="flex items-start justify-between">
@@ -105,6 +112,7 @@ const ThreadCard = ({
                 />
               </div>
 
+              {/* NUMBER OF REPLIES FOR COMMENTS */}
               {isComment && comments?.length > 0 && (
                 <Link href={`/thread/${id}`}>
                   <p className="mt-1 text-subtle-medium text-gray-1">
@@ -115,9 +123,56 @@ const ThreadCard = ({
             </div>
           </div>
         </div>
+
+        {/* TODO: Delete thread */}
+        {/* TODO: Show comment logos */}
       </div>
+
+      {/* COMMUNITY DETAILS */}
+      {!isComment && community && (
+        <Link
+          href={`/communities/${community.id}`}
+          className="mt-5 flex items-center"
+        >
+          <p className="text-subtle-medium text-gray-1">
+            {formatDateString(createdAt)}
+            {' - '}
+            {community.name} Community
+          </p>
+
+          <Image
+            src={community.image}
+            alt={community.name}
+            width={14}
+            height={14}
+            className="ml-1 rounded-full object-cover"
+          />
+        </Link>
+      )}
+
+      {/* NUMBER OF REPLIES */}
+      {!isComment && commentsCount > 0 && (
+        <div className="mt-4 flex items-center">
+          {uniqueAuthorImgs.slice(0, 2).map((image, index) => (
+            <Image
+              key={index}
+              src={image}
+              alt={`user_${index}`}
+              width={28}
+              height={28}
+              className={`${index !== 0 && '-ml-2'} rounded-full object-cover`}
+            />
+          ))}
+          <Link
+            href={`/thread/${id}`}
+            className={`${disableRepliesLink && 'pointer-events-none'}`}
+          >
+            <p className="ml-2 text-subtle-medium text-gray-1">
+              {commentsCount} replies
+            </p>
+          </Link>
+        </div>
+      )}
     </article>
   );
-};
-
-export default ThreadCard;
+}

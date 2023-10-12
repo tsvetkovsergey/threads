@@ -33,6 +33,7 @@ export default async function Page({ params }: { params: { id: string } }) {
           community={thread.community}
           createdAt={thread.createdAt}
           comments={thread.children}
+          disableRepliesLink
         />
       </div>
 
