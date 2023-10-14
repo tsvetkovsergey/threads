@@ -10,6 +10,8 @@ interface Props {
 }
 
 export default async function Page({ searchParams }: Props) {
+  console.log('SEARCH PAGE');
+
   // Check if query in params is valid search string
   if (searchParams.q && !isValidSearch(searchParams.q)) redirect('/search');
 

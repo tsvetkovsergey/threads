@@ -169,3 +169,15 @@ export async function getActivity(userId: string) {
     throw new Error(`Failed to fetch activity: ${error.message}`);
   }
 }
+
+export async function fetchRandomUsers(size = 3) {
+  try {
+    connectToDB();
+
+    const randomUsers = await User.aggregate().sample(size);
+
+    return randomUsers;
+  } catch (error: any) {
+    console.error('Failed to fetch random communities: ', error);
+  }
+}
