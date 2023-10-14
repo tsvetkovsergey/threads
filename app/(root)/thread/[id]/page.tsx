@@ -17,8 +17,8 @@ export default async function Page({ params }: { params: { id: string } }) {
   // console.log(user);
 
   const thread = await fetchThreadById(params.id);
-  console.log('CHILDREN');
-  console.log(thread.children);
+  // console.log('CHILDREN');
+  // console.log(thread.children);
 
   return (
     <section className="relative">

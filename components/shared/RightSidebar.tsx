@@ -2,7 +2,7 @@ import { fetchRandomCommunities } from '@/lib/actions/community.actions';
 
 export default async function RightSidebar() {
   const randomCommunities = await fetchRandomCommunities();
-  console.log(randomCommunities);
+  // console.log(randomCommunities);
 
   return (
     <section className="custom-scrollbar rightsidebar">

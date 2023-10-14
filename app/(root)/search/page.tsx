@@ -1,9 +1,18 @@
 import UserCard from '@/components/cards/UserCard';
-import { fetchUser, fetchAllUsers } from '@/lib/actions/user.actions';
+import SearchBar from '@/components/shared/SearchBar';
+import { fetchAllUsers, fetchUser } from '@/lib/actions/user.actions';
+import { isValidSearch } from '@/lib/validations/search';
 import { currentUser } from '@clerk/nextjs';
 import { redirect } from 'next/navigation';
 
-export default async function Page() {
+interface Props {
+  searchParams: { [key: string]: string | undefined };
+}
+
+export default async function Page({ searchParams }: Props) {
+  // Check if query in params is valid search string
+  if (searchParams.q && !isValidSearch(searchParams.q)) redirect('/search');
+
   // Check if the user is logged in
   const user = await currentUser();
   if (!user) return null;
@@ -15,7 +24,7 @@ export default async function Page() {
   // Fetch users
   const { users, isNotLastPage } = await fetchAllUsers({
     userId: user.id,
-    searchString: '',
+    searchString: searchParams.q || '',
     pageNumber: 1,
     pageSize: 25,
   });
@@ -25,7 +34,9 @@ export default async function Page() {
       <h1 className="head-text mb-10">Search</h1>
 
       {/* SEARCH BAR */}
+      <SearchBar placeholder="Search users" />
 
+      {/* LIST OF USERS */}
       <div className="mt-14 flex flex-col gap-9">
         {users.length === 0 ? (
           <p className="no-result">No users</p>
