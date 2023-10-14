@@ -249,3 +249,30 @@ export async function deleteThread(id: string, path: string): Promise<void> {
     throw new Error(`Failed to delete thread: ${error.message}`);
   }
 }
+
+export async function likeThread(
+  threadId: string,
+  userId: string,
+  path: string
+) {
+  try {
+    connectToDB();
+
+    // Find current user
+    const user = await User.findOne({ id: userId }).select('_id');
+    if (!user) throw new Error('Current user not found.');
+
+    // Find the thread
+    const thread = await Thread.findById(threadId);
+
+    // Update the thread
+    if (!thread.likedBy.includes(user._id)) {
+      thread.likedBy.push(user._id);
+      await thread.save();
+    }
+
+    revalidatePath(path);
+  } catch (error: any) {
+    throw new Error(`Failed to like a thread: ${error.message}`);
+  }
+}

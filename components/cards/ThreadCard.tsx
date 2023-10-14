@@ -2,6 +2,7 @@ import { formatDateString } from '@/lib/utils';
 import Image from 'next/image';
 import Link from 'next/link';
 import RepliesCount from './additional/RepliesCount';
+import LikeButton from '../ui/LikeButton';
 
 interface Props {
   id: string;
@@ -25,6 +26,7 @@ interface Props {
     };
   }[];
   isComment?: boolean;
+  isLiked?: boolean;
   disableRepliesLink?: boolean;
 }
 
@@ -38,6 +40,7 @@ export default function ThreadCard({
   createdAt,
   comments,
   isComment,
+  isLiked = false,
   disableRepliesLink = false,
 }: Props) {
   return (
@@ -77,12 +80,10 @@ export default function ThreadCard({
             {/* SOCIAL BUTTONS */}
             <div className={`mt-5 flex flex-col gap-3 ${isComment && 'mb-10'}`}>
               <div className="flex gap-3.5">
-                <Image
-                  src="/assets/heart-gray.svg"
-                  alt="heart"
-                  width={24}
-                  height={24}
-                  className="cursor-pointer object-contain"
+                <LikeButton
+                  userId={currentUserId}
+                  threadId={id.toString()}
+                  isLiked={isLiked}
                 />
                 <Link href={`/thread/${id}`}>
                   <Image

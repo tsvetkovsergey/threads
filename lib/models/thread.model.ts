@@ -5,6 +5,7 @@ const threadSchema = new mongoose.Schema({
   author: { type: mongoose.Schema.Types.ObjectId, ref: 'User', required: true },
   community: { type: mongoose.Schema.Types.ObjectId, ref: 'Community' },
   createdAt: { type: mongoose.Schema.Types.Date, default: Date.now },
+  likedBy: [{ type: mongoose.Schema.Types.ObjectId, ref: 'User' }],
   parentId: { type: String },
   children: [
     {

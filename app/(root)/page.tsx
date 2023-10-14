@@ -1,10 +1,17 @@
 import ThreadCard from '@/components/cards/ThreadCard';
 import { fetchThreads } from '@/lib/actions/thread.actions';
+import { fetchUser } from '@/lib/actions/user.actions';
 import { currentUser } from '@clerk/nextjs';
 
 export default async function Home() {
   const { threads, isNotLastPage } = await fetchThreads(1, 30);
   const user = await currentUser();
+
+  let userId = '';
+  if (user) {
+    const userInfo = await fetchUser(user.id);
+    userId = userInfo._id;
+  }
 
   return (
     <>
@@ -26,6 +33,7 @@ export default async function Home() {
                 community={thread.community}
                 createdAt={thread.createdAt}
                 comments={thread.children}
+                isLiked={thread.likedBy.includes(userId)}
               />
             ))}
           </>
