@@ -7,11 +7,12 @@ import { useRouter, usePathname, useSearchParams } from 'next/navigation';
 import { isValidSearch } from '@/lib/validations/search';
 
 interface Props {
+  initialValue?: string;
   placeholder?: string;
 }
 
-export default function SearchBar({ placeholder }: Props) {
-  const [input, setInput] = useState('');
+export default function SearchBar({ initialValue = '', placeholder }: Props) {
+  const [input, setInput] = useState(initialValue);
 
   const router = useRouter();
   const pathname = usePathname();
@@ -35,7 +36,7 @@ export default function SearchBar({ placeholder }: Props) {
       // Construct and push new url string
       const paramsString = params.size > 0 ? `?${params.toString()}` : '';
       const url = `${pathname}${paramsString}`;
-      router.push(url);
+      // router.push(url);
     }, 300);
 
     return () => clearTimeout(debounceUpdateUrl);

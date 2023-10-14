@@ -34,7 +34,7 @@ export default async function Page({ searchParams }: Props) {
       <h1 className="head-text mb-10">Search</h1>
 
       {/* SEARCH BAR */}
-      <SearchBar placeholder="Search users" />
+      <SearchBar initialValue={searchParams.q} placeholder="Search users" />
 
       {/* LIST OF USERS */}
       <div className="mt-14 flex flex-col gap-9">
