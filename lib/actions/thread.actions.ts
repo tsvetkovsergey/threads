@@ -193,23 +193,28 @@ async function fetchAllChildThreads(threadId: string): Promise<any[]> {
   return descendantThreads;
 }
 
-export async function deleteThread(id: string, path: string): Promise<void> {
+export async function deleteThread(
+  threadId: string,
+  path: string
+): Promise<void> {
   try {
     connectToDB();
 
     // Find the thread to be deleted (the main thread)
-    const mainThread = await Thread.findById(id).populate('author community');
+    const mainThread = await Thread.findById(threadId).populate(
+      'author community'
+    );
 
     if (!mainThread) {
       throw new Error('Thread not found');
     }
 
     // Fetch all child threads and their descendants recursively
-    const descendantThreads = await fetchAllChildThreads(id);
+    const descendantThreads = await fetchAllChildThreads(threadId);
 
     // Get all descendant thread IDs including the main thread ID and child thread IDs
     const descendantThreadIds = [
-      id,
+      threadId,
       ...descendantThreads.map((thread) => thread._id),
     ];
 

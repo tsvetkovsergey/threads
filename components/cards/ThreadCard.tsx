@@ -3,6 +3,7 @@ import Image from 'next/image';
 import Link from 'next/link';
 import RepliesCount from './additional/RepliesCount';
 import LikeButton from '../ui/LikeButton';
+import DeleteButton from '../ui/DeleteButton';
 
 interface Props {
   id: string;
@@ -120,6 +121,11 @@ export default function ThreadCard({
         </div>
 
         {/* TODO: Delete thread */}
+        <DeleteButton
+          threadId={id.toString()}
+          authorId={author.id}
+          userId={clerkId}
+        />
       </div>
 
       {/* COMMUNITY DETAILS */}
