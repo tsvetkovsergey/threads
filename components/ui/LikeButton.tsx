@@ -1,6 +1,6 @@
 'use client';
 
-import { likeThread } from '@/lib/actions/thread.actions';
+import { dislikeThread, likeThread } from '@/lib/actions/thread.actions';
 import Image from 'next/image';
 import { usePathname } from 'next/navigation';
 import { useState } from 'react';
@@ -22,7 +22,15 @@ export default function LikeButton({
   const handleClick = () => {
     if (!threadId || !userId) return;
 
-    likeThread(threadId, userId, pathname);
+    // Like or dislike a thread
+    if (!liked) {
+      likeThread(threadId, userId, pathname);
+    } else {
+      dislikeThread(threadId, userId, pathname);
+    }
+
+    // Toggle liked state
+    setLiked((current) => !current);
   };
 
   return (
@@ -32,7 +40,7 @@ export default function LikeButton({
         alt="heart"
         width={24}
         height={24}
-        className="cursor-pointer object-contain fill-rose-400 text-rose-400 stroke-rose-400 border-rose-400"
+        className="cursor-pointer object-contain"
       />
     </button>
   );

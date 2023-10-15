@@ -8,11 +8,11 @@ import Image from 'next/image';
 import { redirect } from 'next/navigation';
 
 export default async function Page({ params }: { params: { id: string } }) {
-  // Check if the user is logged in
+  // Check if the current user is logged in
   const user = await currentUser();
   if (!user) return null;
 
-  // Check if the user properly onboarded
+  // Check if the user (which profile you open) properly onboarded
   const userInfo = await fetchUser(params.id);
   if (!userInfo?.onboarded) redirect('/onboarding');
 
@@ -56,7 +56,7 @@ export default async function Page({ params }: { params: { id: string } }) {
               className="w-full text-light-1"
             >
               <ThreadsTab
-                currentUserId={user.id}
+                clerkId={user.id}
                 accountId={userInfo.id}
                 accountType="User"
               />

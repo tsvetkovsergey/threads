@@ -30,6 +30,7 @@ export default function CommunityCard({
             src={imageUrl}
             alt="community_logo"
             fill
+            sizes="10vw"
             className="rounded-full object-cover"
           />
         </Link>

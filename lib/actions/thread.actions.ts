@@ -4,7 +4,6 @@ import { revalidatePath } from 'next/cache';
 import Thread from '../models/thread.model';
 import User from '../models/user.model';
 import { connectToDB } from '../mongoose';
-import { fetchCommunityDetails } from './community.actions';
 import Community from '../models/community.model';
 
 interface createThreadParams {
@@ -274,5 +273,32 @@ export async function likeThread(
     revalidatePath(path);
   } catch (error: any) {
     throw new Error(`Failed to like a thread: ${error.message}`);
+  }
+}
+
+export async function dislikeThread(
+  threadId: string,
+  userId: string,
+  path: string
+) {
+  try {
+    connectToDB();
+
+    // Find current user
+    const user = await User.findOne({ id: userId }).select('_id');
+    if (!user) throw new Error('Current user not found.');
+
+    // Find the thread
+    const thread = await Thread.findById(threadId);
+
+    // Update the thread
+    thread.likedBy = thread.likedBy.filter((userId: string) => {
+      userId === user._id;
+    });
+    await thread.save();
+
+    revalidatePath(path);
+  } catch (error: any) {
+    throw new Error(`Failed to dislike a thread: ${error.message}`);
   }
 }

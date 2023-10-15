@@ -33,13 +33,15 @@ export default async function Page({ params }: { params: { id: string } }) {
           <TabsList className="tab">
             {communityTabs.map((tab) => (
               <TabsTrigger key={tab.label} value={tab.value} className="tab">
-                <Image
-                  src={tab.icon}
-                  alt={tab.label}
-                  width={24}
-                  height={24}
-                  className="object-contain"
-                />
+                <div className="relative w-6 h-6">
+                  <Image
+                    src={tab.icon}
+                    alt={tab.label}
+                    fill
+                    sizes="10vw"
+                    className="object-contain"
+                  />
+                </div>
                 <p className="max-sm:hidden">{tab.label}</p>
 
                 {tab.label === 'Threads' && (
@@ -51,13 +53,16 @@ export default async function Page({ params }: { params: { id: string } }) {
             ))}
           </TabsList>
 
+          {/* THREADS */}
           <TabsContent value="threads" className="w-full text-light-1">
             <ThreadsTab
-              currentUserId={user.id}
+              clerkId={user.id}
               accountId={community._id}
               accountType="Community"
             />
           </TabsContent>
+
+          {/* MEMBERS */}
           <TabsContent value="members" className="w-full text-light-1">
             <section className="mt-9 flex flex-col gap-10">
               {community?.members.map((member: any) => (
@@ -72,9 +77,11 @@ export default async function Page({ params }: { params: { id: string } }) {
               ))}
             </section>
           </TabsContent>
+
+          {/* REQUESTS */}
           <TabsContent value="requests" className="w-full text-light-1">
             <ThreadsTab
-              currentUserId={user.id}
+              clerkId={user.id}
               accountId={community._id}
               accountType="Community"
             />

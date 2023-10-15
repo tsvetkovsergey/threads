@@ -6,7 +6,7 @@ import LikeButton from '../ui/LikeButton';
 
 interface Props {
   id: string;
-  currentUserId: string;
+  clerkId: string;
   parentId: string | null;
   content: string;
   author: {
@@ -32,7 +32,7 @@ interface Props {
 
 export default function ThreadCard({
   id,
-  currentUserId,
+  clerkId,
   parentId,
   content,
   author,
@@ -58,6 +58,7 @@ export default function ThreadCard({
                 src={author.image}
                 alt="Profile image"
                 fill
+                sizes="10vw"
                 className="cursor-pointer rounded-full"
               />
             </Link>
@@ -81,8 +82,8 @@ export default function ThreadCard({
             <div className={`mt-5 flex flex-col gap-3 ${isComment && 'mb-10'}`}>
               <div className="flex gap-3.5">
                 <LikeButton
-                  userId={currentUserId}
                   threadId={id.toString()}
+                  userId={clerkId}
                   isLiked={isLiked}
                 />
                 <Link href={`/thread/${id}`}>
@@ -133,13 +134,15 @@ export default function ThreadCard({
             {community.name} Community
           </p>
 
-          <Image
-            src={community.image}
-            alt={community.name}
-            width={14}
-            height={14}
-            className="ml-1 rounded-full object-cover"
-          />
+          <div className="w-4 h-4 relative">
+            <Image
+              src={community.image}
+              alt={community.name}
+              fill
+              sizes="5vw"
+              className="ml-1 rounded-full object-cover"
+            />
+          </div>
         </Link>
       )}
 

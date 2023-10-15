@@ -26,13 +26,14 @@ export default async function Page({ params }: { params: { id: string } }) {
         <ThreadCard
           key={thread._id}
           id={thread._id}
-          currentUserId={user?.id || ''}
+          clerkId={user?.id || ''}
           parentId={thread.parentId}
           content={thread.text}
           author={thread.author}
           community={thread.community}
           createdAt={thread.createdAt}
           comments={thread.children}
+          isLiked={thread.likedBy.includes(userInfo._id)}
           disableRepliesLink
         />
       </div>
@@ -51,7 +52,7 @@ export default async function Page({ params }: { params: { id: string } }) {
           <ThreadCard
             key={comment._id}
             id={comment._id}
-            currentUserId={user?.id || ''}
+            clerkId={user?.id || ''}
             parentId={comment.parentId}
             content={comment.text}
             author={comment.author}

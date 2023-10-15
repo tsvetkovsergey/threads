@@ -24,11 +24,12 @@ export default function UserCard({
   return (
     <article className="user-card">
       <div className="user-card_avatar">
-        <div className="relative h-12 w-12">
+        <div className="relative w-12 h-12">
           <Image
             src={imageUrl}
             alt="logo"
             fill
+            sizes="10vw"
             className="rounded-full object-cover"
           />
         </div>
