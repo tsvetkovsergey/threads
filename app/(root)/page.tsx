@@ -34,6 +34,7 @@ export default async function Home() {
                 createdAt={thread.createdAt}
                 comments={thread.children}
                 isLiked={thread.likedBy.includes(userId)}
+                isRootPage
               />
             ))}
           </>

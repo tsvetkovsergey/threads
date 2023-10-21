@@ -10,17 +10,13 @@ interface Props {
   userId: string;
 }
 
-export default async function DeleteButton({
-  threadId,
-  authorId,
-  userId,
-}: Props) {
+export default function DeleteButton({ threadId, authorId, userId }: Props) {
   if (authorId !== userId) return null;
 
   const path = usePathname();
 
-  const clickHandler = async () => {
-    await deleteThread(threadId, path);
+  const clickHandler = () => {
+    deleteThread(threadId, path);
   };
 
   return (

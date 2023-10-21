@@ -22,6 +22,7 @@ import { ChangeEvent, useState } from 'react';
 import { isBase64Image } from '@/lib/utils';
 import { useUploadThing } from '@/lib/uploadthing';
 import { updateUser } from '@/lib/actions/user.actions';
+import { useUser } from '@clerk/nextjs';
 
 interface Props {
   user: {
@@ -51,6 +52,9 @@ const AccountProfile = ({ user, btnTitle }: Props) => {
       bio: user?.bio || '',
     },
   });
+
+  // test
+  const { user: clerkUser } = useUser();
 
   const handleImage = (
     e: ChangeEvent<HTMLInputElement>,
@@ -103,6 +107,11 @@ const AccountProfile = ({ user, btnTitle }: Props) => {
       image: values.profile_photo,
       path: pathname,
     });
+
+    // Update Clerk user profile image
+    if (clerkUser && files[0] && files[0].type.includes('image')) {
+      await clerkUser.setProfileImage({ file: files[0] });
+    }
 
     if (pathname === '/profile/edit') {
       router.back();

@@ -29,6 +29,7 @@ interface Props {
   isComment?: boolean;
   isLiked?: boolean;
   disableRepliesLink?: boolean;
+  isRootPage?: boolean;
 }
 
 export default function ThreadCard({
@@ -43,6 +44,7 @@ export default function ThreadCard({
   isComment,
   isLiked = false,
   disableRepliesLink = false,
+  isRootPage = false,
 }: Props) {
   return (
     <article
@@ -154,7 +156,11 @@ export default function ThreadCard({
 
       {/* NUMBER OF REPLIES FOR THREAD */}
       {!isComment && (
-        <RepliesCount threadId={id} comments={comments} disableRepliesLink />
+        <RepliesCount
+          threadId={id}
+          comments={comments}
+          disableRepliesLink={!isRootPage}
+        />
       )}
     </article>
   );

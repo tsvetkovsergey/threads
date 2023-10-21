@@ -12,7 +12,7 @@ export default async function Page() {
 
   const userData = {
     id: user.id,
-    objectId: userInfo?._id,
+    objectId: userInfo?._id.toString(),
     username: userInfo ? userInfo?.username : user.username,
     name: userInfo ? userInfo?.name : user.firstName ?? '',
     bio: userInfo ? userInfo?.bio : '',

@@ -5,6 +5,18 @@ import { fetchUser } from '@/lib/actions/user.actions';
 import { currentUser } from '@clerk/nextjs';
 import { redirect } from 'next/navigation';
 
+type Thread = {
+  _id: string;
+  id: string;
+  text: string;
+  author: { name: string; image: string; id: string };
+  community: { id: string; name: string; image: string };
+  likedBy: string[];
+  createdAt: string;
+  parentId: string;
+  children: Thread[];
+};
+
 export default async function Page({ params }: { params: { id: string } }) {
   if (!params.id) return null;
 
@@ -14,10 +26,7 @@ export default async function Page({ params }: { params: { id: string } }) {
   const userInfo = await fetchUser(user.id);
   if (!userInfo?.onboarded) redirect('/onboarding');
 
-  // console.log(user);
-
-  const thread = await fetchThreadById(params.id);
-  // console.log('CHILDREN');
+  const thread: Thread = await fetchThreadById(params.id);
   // console.log(thread.children);
 
   return (
@@ -48,20 +57,25 @@ export default async function Page({ params }: { params: { id: string } }) {
 
       {/* COMMENTS */}
       <div className="mt-10">
-        {thread.children.map((comment: any) => (
-          <ThreadCard
-            key={comment._id}
-            id={comment._id}
-            clerkId={user?.id || ''}
-            parentId={comment.parentId}
-            content={comment.text}
-            author={comment.author}
-            community={comment.community}
-            createdAt={comment.createdAt}
-            comments={comment.children}
-            isComment
-          />
-        ))}
+        {thread.children
+          .sort(
+            (a, b) =>
+              new Date(a.createdAt).getTime() - new Date(b.createdAt).getTime()
+          )
+          .map((comment: any) => (
+            <ThreadCard
+              key={comment._id}
+              id={comment._id}
+              clerkId={user?.id || ''}
+              parentId={comment.parentId}
+              content={comment.text}
+              author={comment.author}
+              community={comment.community}
+              createdAt={comment.createdAt}
+              comments={comment.children}
+              isComment
+            />
+          ))}
       </div>
     </section>
   );
