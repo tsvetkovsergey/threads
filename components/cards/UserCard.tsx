@@ -10,6 +10,7 @@ interface Props {
   username: string;
   imageUrl: string;
   personType: 'User' | 'Community';
+  isAdmin?: boolean;
 }
 
 export default function UserCard({
@@ -18,6 +19,7 @@ export default function UserCard({
   username,
   imageUrl,
   personType,
+  isAdmin = false,
 }: Props) {
   const router = useRouter();
 
@@ -34,10 +36,17 @@ export default function UserCard({
           />
         </div>
 
-        <div className="flex-1 text-ellipsis">
+        <div className="text-ellipsis">
           <h4 className="text-base-semibold text-light-1">{name}</h4>
           <p className="text-small-medium text-gray-1">@{username}</p>
         </div>
+
+        {isAdmin && (
+          <div className="flex-1 pl-4 flex gap-2 items-center">
+            <Image src="/assets/admin.svg" alt="Admin" height={32} width={32} />
+            <p className="text-gray-1 text-base-semibold">Admin</p>
+          </div>
+        )}
       </div>
 
       <Button

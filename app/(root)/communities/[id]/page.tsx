@@ -16,6 +16,8 @@ export default async function Page({ params }: { params: { id: string } }) {
   // Get Community details
   const community = await fetchCommunityDetails(params.id);
 
+  // console.log(community);
+
   return (
     <section>
       <ProfileHeader
@@ -73,6 +75,7 @@ export default async function Page({ params }: { params: { id: string } }) {
                   username={member.username}
                   imageUrl={member.image}
                   personType="User"
+                  isAdmin={community.createdBy.id === member.id}
                 />
               ))}
             </section>
