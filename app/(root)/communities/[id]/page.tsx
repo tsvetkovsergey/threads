@@ -27,6 +27,7 @@ export default async function Page({ params }: { params: { id: string } }) {
         username={community.username}
         imgUrl={community.image}
         bio={community.bio}
+        communityAdminId={community.createdBy.id}
         type="Community"
       />
 

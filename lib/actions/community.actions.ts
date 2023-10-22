@@ -7,6 +7,8 @@ import Thread from '../models/thread.model';
 import User from '../models/user.model';
 
 import { connectToDB } from '../mongoose';
+import { clerkClient } from '@clerk/nextjs';
+import { revalidatePath } from 'next/cache';
 
 export async function createCommunity(
   id: string,
@@ -243,26 +245,37 @@ export async function removeUserFromCommunity(
   }
 }
 
-export async function updateCommunityInfo(
-  communityId: string,
-  name: string,
-  username: string,
-  image: string
-) {
+export async function updateCommunityInfo({
+  communityId,
+  name,
+  username,
+  image,
+  path,
+  bio,
+}: {
+  communityId: string;
+  name: string;
+  username: string;
+  image: string;
+  bio?: string;
+  path?: string;
+}) {
   try {
     connectToDB();
 
     // Find the community by its _id and update the information
     const updatedCommunity = await Community.findOneAndUpdate(
       { id: communityId },
-      { name, username, image }
+      { name, username, image, bio: bio || 'No description' }
     );
 
     if (!updatedCommunity) {
       throw new Error('Community not found');
     }
 
-    return updatedCommunity;
+    if (path) revalidatePath(path);
+
+    // return updatedCommunity;
   } catch (error) {
     // Handle any errors
     console.error('Error updating community information:', error);
@@ -313,5 +326,15 @@ export async function fetchRandomCommunities(size = 3) {
     return randomCommunities;
   } catch (error: any) {
     console.error('Failed to fetch random communities: ', error);
+  }
+}
+
+export async function updateClerkOrganization(id: string, name: string) {
+  try {
+    await clerkClient.organizations.updateOrganization(id, {
+      name,
+    });
+  } catch (error: any) {
+    console.error('Failed to update Clerk community: ', error);
   }
 }

@@ -167,8 +167,12 @@ export const POST = async (request: Request) => {
       const { id, logo_url, name, slug } = evnt?.data;
       console.log('updated', evnt?.data);
 
-      // @ts-ignore
-      await updateCommunityInfo(id, name, slug, logo_url);
+      await updateCommunityInfo({
+        communityId: id.toString(),
+        name: name.toString(),
+        username: slug.toString(),
+        image: logo_url.toString(),
+      });
 
       return NextResponse.json({ message: 'Member removed' }, { status: 201 });
     } catch (err) {

@@ -8,6 +8,7 @@ interface Props {
   username: string;
   imgUrl: string;
   bio: string;
+  communityAdminId?: string;
   type?: 'User' | 'Community';
 }
 
@@ -18,8 +19,18 @@ export default function ProfileHeader({
   username,
   imgUrl,
   bio,
-  type,
+  communityAdminId,
+  type = 'User',
 }: Props) {
+  // console.log(communityAdminId);
+  // console.log(authUserId);
+
+  const isEditable =
+    (type === 'User' && accountId === authUserId) ||
+    (type === 'Community' && communityAdminId === authUserId);
+  const editLink =
+    type === 'User' ? '/profile/edit' : `/communities/edit/${accountId}`;
+
   return (
     <div className="flex w-full flex-col justify-start">
       <div className="flex items-center justify-between">
@@ -43,15 +54,19 @@ export default function ProfileHeader({
             <p className="text-base-medium text-gray-1">@{username}</p>
           </div>
         </div>
-        {accountId === authUserId && type !== 'Community' && (
-          <Link href="/profile/edit">
-            <div className="flex cursor-pointer gap-3 rounded-lg bg-dark-3 px-4 py-2">
-              <Image
-                src="/assets/edit.svg"
-                alt="logout"
-                width={16}
-                height={16}
-              />
+
+        {/* EDIT BUTTON */}
+        {isEditable && (
+          <Link href={editLink}>
+            <div className="flex cursor-pointer gap-3 rounded-lg bg-dark-3 px-4 py-2 items-center">
+              <div className="w-4 h-4 relative">
+                <Image
+                  src="/assets/edit.svg"
+                  alt="logout"
+                  fill
+                  className="object-cover"
+                />
+              </div>
 
               <p className="text-light-2 max-sm:hidden">Edit</p>
             </div>
