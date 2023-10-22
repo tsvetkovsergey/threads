@@ -4,14 +4,20 @@ import { fetchAllUsers, fetchUser } from '@/lib/actions/user.actions';
 import { isValidSearch } from '@/lib/validations/search';
 import { currentUser } from '@clerk/nextjs';
 import { redirect } from 'next/navigation';
+import Pagination from '@/components/shared/Pagination';
 
 interface Props {
   searchParams: { [key: string]: string | undefined };
 }
 
+const pageSize = 25;
+
 export default async function Page({ searchParams }: Props) {
   // Check if query in params is valid search string
   if (searchParams.q && !isValidSearch(searchParams.q)) redirect('/search');
+
+  // If there is no page param in url use page number 1
+  const pageNumber = Number(searchParams.page) || 1;
 
   // Check if the user is logged in
   const user = await currentUser();
@@ -25,8 +31,8 @@ export default async function Page({ searchParams }: Props) {
   const { users, isNotLastPage } = await fetchAllUsers({
     userId: user.id,
     searchString: searchParams.q || '',
-    pageNumber: 1,
-    pageSize: 25,
+    pageNumber,
+    pageSize,
   });
 
   return (
@@ -54,6 +60,9 @@ export default async function Page({ searchParams }: Props) {
             ))}
           </>
         )}
+
+        {/* PAGINATION */}
+        <Pagination pageNumber={pageNumber} isNotLastPage={isNotLastPage} />
       </div>
     </section>
   );

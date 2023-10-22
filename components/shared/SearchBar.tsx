@@ -36,7 +36,7 @@ export default function SearchBar({ initialValue = '', placeholder }: Props) {
       // Construct and push new url string
       const paramsString = params.size > 0 ? `?${params.toString()}` : '';
       const url = `${pathname}${paramsString}`;
-      // router.push(url);
+      router.push(url);
     }, 300);
 
     return () => clearTimeout(debounceUpdateUrl);
