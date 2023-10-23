@@ -23,7 +23,8 @@ export default function CommunityCard({
   members,
 }: Props) {
   return (
-    <article className="community-card">
+    <article className="community-card flex flex-col">
+      {/* LOGO AND NAME */}
       <div className="flex flex-wrap items-center gap-3">
         <Link href={`/communities/${id}`} className="relative h-12 w-12">
           <Image
@@ -43,9 +44,13 @@ export default function CommunityCard({
         </div>
       </div>
 
-      <p className="mt-4 text-subtle-medium text-gray-1">{bio}</p>
+      {/* BIO */}
+      <p className="flex-1 mt-8 text-subtle-medium text-gray-1 line-clamp-4">
+        {bio}
+      </p>
 
-      <div className="mt-5 flex flex-wrap items-center justify-between gap-3">
+      {/* BUTTON & MEMBERS */}
+      <div className="mt-8 flex flex-wrap items-center justify-between gap-3">
         <Link href={`/communities/${id}`}>
           <Button size="sm" className="community-card_btn">
             View

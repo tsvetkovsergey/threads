@@ -31,6 +31,7 @@ export default async function Page({ params }: { params: { id: string } }) {
         type="Community"
       />
 
+      {/* TABS */}
       <div className="mt-9">
         <Tabs defaultValue="threads" className="w-full">
           <TabsList className="tab">

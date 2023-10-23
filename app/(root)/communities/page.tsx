@@ -11,7 +11,7 @@ interface Props {
   searchParams: { [key: string]: string | undefined };
 }
 
-const pageSize = 4;
+const pageSize = 10;
 
 export default async function Page({ searchParams }: Props) {
   // Check if query in params is valid search string
@@ -48,22 +48,25 @@ export default async function Page({ searchParams }: Props) {
       />
 
       {/* LIST OF COMMUNITIES */}
-      <div className="mt-14 flex flex-col gap-9">
+      {/* <div className="mt-14 flex flex-col gap-9"> */}
+      <div className="mt-14">
         {communities.length === 0 ? (
           <p className="no-result">No communities</p>
         ) : (
           <>
-            {communities.map((community) => (
-              <CommunityCard
-                key={community.id}
-                id={community.id}
-                name={community.name}
-                username={community.username}
-                imageUrl={community.image}
-                bio={community.bio}
-                members={community.members}
-              />
-            ))}
+            <div className="grid gap-9 mb-9 grid-cols-[repeat(auto-fill,_minmax(20rem,_1fr))]">
+              {communities.map((community) => (
+                <CommunityCard
+                  key={community.id}
+                  id={community.id}
+                  name={community.name}
+                  username={community.username}
+                  imageUrl={community.image}
+                  bio={community.bio}
+                  members={community.members}
+                />
+              ))}
+            </div>
           </>
         )}
 
