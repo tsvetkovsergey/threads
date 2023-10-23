@@ -1,4 +1,5 @@
 import CommunityCard from '@/components/cards/CommunityCard';
+import Pagination from '@/components/shared/Pagination';
 import SearchBar from '@/components/shared/SearchBar';
 import { fetchCommunities } from '@/lib/actions/community.actions';
 import { fetchUser } from '@/lib/actions/user.actions';
@@ -10,11 +11,16 @@ interface Props {
   searchParams: { [key: string]: string | undefined };
 }
 
+const pageSize = 4;
+
 export default async function Page({ searchParams }: Props) {
   // Check if query in params is valid search string
   if (searchParams.q && !isValidSearch(searchParams.q)) {
     redirect('/communities');
   }
+
+  // If there is no page param in url use page number 1
+  const pageNumber = Number(searchParams.page) || 1;
 
   // Check if the user is logged in
   const user = await currentUser();
@@ -27,8 +33,8 @@ export default async function Page({ searchParams }: Props) {
   // Fetch communities
   const { communities, isNotLastPage } = await fetchCommunities({
     searchString: searchParams.q || '',
-    pageNumber: 1,
-    pageSize: 25,
+    pageNumber,
+    pageSize,
   });
 
   return (
@@ -60,6 +66,9 @@ export default async function Page({ searchParams }: Props) {
             ))}
           </>
         )}
+
+        {/* PAGINATION */}
+        <Pagination pageNumber={pageNumber} isNotLastPage={isNotLastPage} />
       </div>
     </section>
   );
