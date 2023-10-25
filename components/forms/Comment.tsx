@@ -78,6 +78,7 @@ export default function Comment({
                   {...field}
                 />
               </FormControl>
+              <FormMessage />
             </FormItem>
           )}
         />
